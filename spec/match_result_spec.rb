@@ -25,4 +25,18 @@ describe Wants do
     end
   end
 
+  describe 'when there are acceptable MIME types' do
+    it 'should not be not_acceptable' do
+      subject.should_not be_not_acceptable
+    end
+
+    it 'should not be blank' do
+      subject.should_not be_blank
+    end
+
+    it 'should be present' do
+      subject.should be_present
+    end
+  end
+
 end

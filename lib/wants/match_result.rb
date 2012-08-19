@@ -1,12 +1,16 @@
+require 'wants/mimeparse'
+
 module Wants
   class MatchResult
 
     def initialize(env, acceptable)
-      @env, @acceptable = env, acceptable
+      @accept = env['Accept'] || ''
+      @acceptable = parse_acceptable(acceptable)
+      @best_match = MIMEParse.best_match(@acceptable, @accept)
     end
 
     def not_acceptable?
-      true
+      @best_match.nil?
     end
 
     def blank?
@@ -15,6 +19,15 @@ module Wants
 
     def present?
       !blank?
+    end
+
+    private
+
+    def parse_acceptable(acceptable)
+      lookup_table = Wants.mime_lookup_table
+      acceptable.map do |mime|
+        lookup_table[".#{mime}"] || mime.to_s
+      end
     end
 
   end
