@@ -4,7 +4,7 @@ require 'wants/match_result'
 describe Wants do
 
   let(:accept)    { 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' }
-  let(:env)       { { 'Accept' => accept } }
+  let(:env)       { { 'HTTP_ACCEPT' => accept } }
   let(:available) { [ :html, :xhtml, :json ] }
 
   subject { Wants::MatchResult.new(env, available) }

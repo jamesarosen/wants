@@ -4,7 +4,7 @@ module Wants
   class MatchResult
 
     def initialize(env, acceptable)
-      @accept = env['Accept'] || ''
+      @accept = env['HTTP_ACCEPT'] || ''
       @acceptable = acceptable.map { |mime| parse_mime(mime) }
       @best_match = MIMEParse.best_match(@acceptable, @accept)
     end
