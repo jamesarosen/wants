@@ -24,7 +24,7 @@ module Wants
     end
 
     def call(env)
-      if MatchResult.new(env, @mime_types).present?
+      if MatchResult.new(env['HTTP_ACCEPT'], @mime_types).present?
         @app.call(env)
       else
         @on_not_acceptable.call(env)

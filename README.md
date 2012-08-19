@@ -30,13 +30,12 @@ require 'wants'
 #### `Wants.new`
 
 ```ruby
-wants = Wants.new( env, [ :html, :json, :atom ] )
+wants = Wants.new( accept, [ :html, :json, :atom ] )
 ```
 
 The `Wants` constructor takes two arguments:
 
- * a [`Rack`](http://rack.github.com/)-style `env` `Hash`. Specifically, the
-   hash should have an `"HTTP_ACCEPT"` key with a value that conforms to
+ * The value of an HTTP Accept header. cf
    [RFC 2616, §14.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1)
  * an `Array` of all the supported MIME types, each of which can be a full
    type (e.g. `"application/json"`) or, if `Rack` is loaded, a key in
@@ -52,9 +51,7 @@ introspection methods:
 This predicate tell you whether there was no acceptable match. For example,
 
 ```ruby
-acceptable = 'application/json'
-offered = [ :html ]
-wants = Wants.new( { 'HTTP_ACCEPT' => acceptable }, offered )
+wants = Wants.new( { 'application/json' }, [ :html ] )
 wants.not_acceptable? # true
 ```
 
@@ -67,7 +64,7 @@ You can use a MIME abbreviation as a query method on the matcher. For example,
 ```ruby
 acceptable = 'text/html,application/xhtml+xml;q=0.9'
 offered = [ :html, :json ]
-wants = Wants.new( { 'HTTP_ACCEPT' => acceptable }, offered )
+wants = Wants.new( acceptable, offered )
 wants.html?  # true
 wants.xhtml? # false
 wants.json?  # false
@@ -80,7 +77,7 @@ To query a full MIME type, use `#[]`. For example,
 ```ruby
 acceptable = 'text/html,application/xhtml+xml;q=0.9'
 offered = [ :html, :json ]
-wants = Wants.new( { 'HTTP_ACCEPT' => acceptable }, offered )
+wants = Wants.new( acceptable, offered )
 wants[:html]                    # true
 wants['text/html']              # true
 wants['application/xhtml_xml']  # false
@@ -94,7 +91,7 @@ Lastly, you can use the matcher as DSL. For example,
 ```ruby
 acceptable = 'application/json,application/javascript;q=0.8'
 offered = [ :html, :json ]
-wants = Wants.new( { 'HTTP_ACCEPT' => acceptable }, offered )
+wants = Wants.new( acceptable, offered )
 
 wants.atom           { build_an_atom_response }
 wants.json           { build_a_json_response }

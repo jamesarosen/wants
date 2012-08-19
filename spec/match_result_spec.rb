@@ -4,10 +4,9 @@ require 'wants/match_result'
 describe Wants do
 
   let(:accept)    { 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' }
-  let(:env)       { { 'HTTP_ACCEPT' => accept } }
   let(:available) { [ :html, :xhtml, :json ] }
 
-  subject { Wants::MatchResult.new(env, available) }
+  subject { Wants::MatchResult.new(accept, available) }
 
   describe 'when there are no acceptable MIME types' do
     let(:accept) { 'application/atom+xml' }

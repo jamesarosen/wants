@@ -3,8 +3,8 @@ require 'wants/mimeparse'
 module Wants
   class MatchResult
 
-    def initialize(env, acceptable)
-      @accept = env['HTTP_ACCEPT'] || ''
+    def initialize(accept_header, acceptable)
+      @accept     = accept_header || ''
       @acceptable = acceptable.map { |mime| parse_mime(mime) }
       @best_match = MIMEParse.best_match(@acceptable, @accept)
     end

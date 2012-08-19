@@ -4,6 +4,7 @@ require 'wants/validate_accepts_middleware'
 describe Wants do
 
   let(:upstream) { double('App') }
+  let(:accept)   { nil }
   let(:env)      { { 'HTTP_ACCEPT' => accept } }
 
   subject { Wants::ValidateAcceptsMiddleware.new(upstream, :mime_types => [ :html, :json ]) }
