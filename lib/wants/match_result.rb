@@ -5,7 +5,7 @@ module Wants
 
     def initialize(env, acceptable)
       @accept = env['Accept'] || ''
-      @acceptable = parse_acceptable(acceptable)
+      @acceptable = acceptable.map { |mime| parse_mime(mime) }
       @best_match = MIMEParse.best_match(@acceptable, @accept)
     end
 
@@ -27,14 +27,8 @@ module Wants
 
     private
 
-    def parse_acceptable(acceptable)
-      lookup_table = Wants.mime_lookup_table
-      acceptable.map { |mime| lookup_table[".#{mime}"] || mime.to_s }
-    end
-
     def parse_mime(mime)
-      lookup_table = Wants.mime_lookup_table
-      lookup_table[".#{mime}"] || mime.to_s
+      Wants.mime_lookup_table[".#{mime}"] || mime.to_s
     end
 
   end
