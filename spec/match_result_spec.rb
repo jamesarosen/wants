@@ -56,6 +56,32 @@ describe Wants do
       end
     end
 
+    describe '#respond_to?' do
+      it 'returns true for MIME-like query methods' do
+        subject.respond_to?(:html?).should be_true
+      end
+    end
+
+    describe 'MIME query methods' do
+      it 'returns true for the best match as an abbreviation' do
+        subject.should be_html
+      end
+
+      it 'returns false for non-best matches' do
+        subject.should_not be_xhtml
+      end
+
+      it 'returns false for non-matches' do
+        subject.should_not be_atom
+      end
+
+      it 'throws an exception if passed arguments' do
+        expect {
+          subject.html? :anything
+        }.to raise_error(ArgumentError)
+      end
+    end
+
   end
 
 end
