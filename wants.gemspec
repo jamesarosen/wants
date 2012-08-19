@@ -1,5 +1,5 @@
 Gem::Specification.new do |gem|
-  gem.version = '0.0.1'
+  gem.version = '1.0.0'
   gem.name = 'wants'
   gem.files = Dir["lib/**/*"] + %w(README.md)
   gem.summary = "HTTP Accept header support"
