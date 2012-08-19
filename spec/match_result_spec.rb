@@ -23,6 +23,27 @@ describe Wants do
     it 'should not be present' do
       subject.should_not be_present
     end
+
+    describe 'any' do
+      it 'acts like a non-best-match MIME block method' do
+        evaluated = 0
+
+        subject.any { evaluated += 1; 'not acceptable' }.should == nil
+        evaluated.should == 0
+      end
+    end
+
+    describe 'not_acceptable' do
+      it 'acts like a best-match MIME block method' do
+        evaluated = 0
+
+        subject.not_acceptable { evaluated += 1; 'not_acceptable' }.should == 'not_acceptable'
+        evaluated.should == 1
+
+        subject.json { evaluated += 1; 'json' }.should == 'not_acceptable'
+        evaluated.should == 1
+      end
+    end
   end
 
   describe 'when there are acceptable MIME types' do
@@ -60,6 +81,10 @@ describe Wants do
       it 'returns true for MIME-like query methods' do
         subject.respond_to?(:html?).should be_true
       end
+
+      it 'returns true for MIME block methods' do
+        subject.respond_to?(:json).should be_true
+      end
     end
 
     describe 'MIME query methods' do
@@ -79,6 +104,42 @@ describe Wants do
         expect {
           subject.html? :anything
         }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe 'MIME block methods' do
+      it 'evaluates the block and returns its result only if the best match' do
+        evaluated = 0
+
+        subject.atom { evaluated += 1; 'atom' }.should be_nil
+        evaluated.should == 0
+
+        subject.html { evaluated += 1; 'html' }.should == 'html'
+        evaluated.should == 1
+
+        subject.json { evaluated += 1; 'json' }.should == 'html'
+        evaluated.should == 1
+      end
+    end
+
+    describe 'any' do
+      it 'acts like a best-match MIME block method' do
+        evaluated = 0
+
+        subject.any { evaluated += 1; 'any' }.should == 'any'
+        evaluated.should == 1
+
+        subject.json { evaluated += 1; 'json' }.should == 'any'
+        evaluated.should == 1
+      end
+    end
+
+    describe 'not_acceptable' do
+      it 'acts like a non-best-match MIME block method' do
+        evaluated = 0
+
+        subject.not_acceptable { evaluated += 1; 'not acceptable' }.should == nil
+        evaluated.should == 0
       end
     end
 

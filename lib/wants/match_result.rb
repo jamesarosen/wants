@@ -25,12 +25,26 @@ module Wants
       @best_match == parse_mime(mime)
     end
 
+    def any(&block)
+      @response_value ||= block.call if present?
+    end
+
+    def not_acceptable(&block)
+      @response_value ||= block.call if blank?
+    end
+
     def method_missing(method, *args, &block)
       if mime = mime_abbreviation_from_method(method)
         if args.length > 0
           raise ArgumentError, "wrong number of arguments (#{args.length} for 0)"
         end
-        self[mime]
+        if method =~ /\?$/
+          self[mime]
+        elsif self[mime]
+          @response_value ||= block.call
+        else
+          @response_value
+        end
       else
         super
       end
@@ -48,7 +62,7 @@ module Wants
     end
 
     def mime_abbreviation_from_method(method)
-      md = /(.+)\?$/.match(method)
+      md = /([^\?]+)\??$/.match(method)
       md && Wants.mime_lookup_table[".#{md[1]}"]
     end
 
