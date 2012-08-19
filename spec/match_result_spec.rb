@@ -37,6 +37,25 @@ describe Wants do
     it 'should be present' do
       subject.should be_present
     end
+
+    describe '[]' do
+      it 'returns true for the best match' do
+        subject['text/html'].should be_true
+      end
+
+      it 'returns true for the best match as an abbreviation' do
+        subject[:html].should be_true
+      end
+
+      it 'returns false for non-best matches' do
+        subject['application/xhtml+xml'].should be_false
+      end
+
+      it 'returns false for non-matches' do
+        subject['application/atom+xml'].should be_false
+      end
+    end
+
   end
 
 end
