@@ -1,7 +1,7 @@
 Gem::Specification.new do |gem|
   gem.version = '1.0.0'
   gem.name = 'wants'
-  gem.files = Dir["lib/**/*"] + %w(README.md)
+  gem.files = Dir["lib/**/*"] + %w(README.md LICENSE)
   gem.summary = "HTTP Accept header support"
   gem.description = "Parse and query the HTTP Accept header"
   gem.email = "james.a.rosen@gmail.com"
