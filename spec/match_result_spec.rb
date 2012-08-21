@@ -30,6 +30,11 @@ describe Wants do
         subject.any { evaluated += 1; 'not acceptable' }.should == nil
         evaluated.should == 0
       end
+
+      it "doesn't shadow previous results" do
+        subject.not_acceptable { 'not acceptable' }
+        subject.any  { 'any' }.should == 'not acceptable'
+      end
     end
 
     describe 'not_acceptable' do
@@ -139,6 +144,11 @@ describe Wants do
 
         subject.not_acceptable { evaluated += 1; 'not acceptable' }.should == nil
         evaluated.should == 0
+      end
+
+      it "doesn't shadow previous results" do
+        subject.html { 'html' }
+        subject.not_acceptable { 'not acceptable' }.should == 'html'
       end
     end
 

@@ -27,10 +27,12 @@ module Wants
 
     def any(&block)
       @response_value ||= block.call if present?
+      @response_value
     end
 
     def not_acceptable(&block)
       @response_value ||= block.call if blank?
+      @response_value
     end
 
     def method_missing(method, *args, &block)
